@@ -41,9 +41,11 @@ void UBombManager::SetBomb(AFloor * floor)
 
 	FTimerHandle timerHandle;
 	FTimerDelegate timerDelegate;
-	timerDelegate.BindLambda([&]() {
+    int row = floor->Row;
+    int col = floor->Column;
+	timerDelegate.BindLambda([=]() {
 		GLog->Log("Explode...");
-		ExplodeBomb(floor->Row, floor->Column);
+		ExplodeBomb(row, col);
 	});
 	GetWorld()->GetTimerManager().SetTimer(timerHandle, timerDelegate, 3.f, false);
 }

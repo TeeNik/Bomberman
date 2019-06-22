@@ -49,7 +49,7 @@ void ABombermanCharacter::SetBomb()
 {
 	ABombermanGameMode* GM = Cast<ABombermanGameMode>(GetWorld()->GetAuthGameMode());
 	if (GM != NULL) {
-		GM->GetBombManager()->SetBomb(NULL);
+		GM->GetBombManager()->SetBomb(Floor);
 	}
 }
 
