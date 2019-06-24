@@ -82,10 +82,12 @@ void ULocationManager::GenerateMap()
 
 void ULocationManager::CreateWall(int & i, int & j)
 {
+	CreateFloor(i, j);
 }
 
 void ULocationManager::CreateDestructable(int & i, int & j)
 {
+	CreateFloor(i, j);
 }
 
 void ULocationManager::CreateFloor(int & i, int & j)

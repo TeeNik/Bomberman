@@ -1,19 +1,20 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "GameFramework/Actor.h"
+#include "UObject/Interface.h"
 #include "Destructible.generated.h"
 
-UCLASS()
-class BOMBERMAN_API ADestructible : public AActor
+UINTERFACE(MinimalAPI, meta = (CannotImplementInterfaceInBlueprint))
+class UDestructible : public UInterface 
+{
+	GENERATED_BODY()
+};
+
+
+class IDestructible
 {
 	GENERATED_BODY()
 	
 public:	
-	ADestructible();
-
-	void Destruct();
-
-protected:
-	virtual void BeginPlay() override;
+	virtual void Destruct() {}
 };

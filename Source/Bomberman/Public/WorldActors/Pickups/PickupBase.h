@@ -2,6 +2,7 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/Actor.h"
+#include "WorldActors/Destructible.h"
 #include "PickupBase.generated.h"
 
 class UBoxComponent;
@@ -9,7 +10,7 @@ class UBoxComponent;
 //base class for any pickups
 
 UCLASS()
-class BOMBERMAN_API APickupBase : public AActor
+class BOMBERMAN_API APickupBase : public AActor, public IDestructible
 {
 	GENERATED_BODY()
 	
