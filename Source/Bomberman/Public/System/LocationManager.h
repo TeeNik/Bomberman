@@ -37,8 +37,8 @@ public:
 	UPROPERTY(EditDefaultsOnly, Category = "LocationManager")
 	TSubclassOf<AFloor> FloorClass;
 
-	//UPROPERTY(EditDefaultsOnly, Category = "LocationManager")
-	//TSubclassOf<AFloor> FloorClass;
+	UPROPERTY(EditDefaultsOnly, Category = "LocationManager")
+	TSubclassOf<AActor> WallClass;
 
 	UPROPERTY()
 	AActor* GridParent = nullptr;

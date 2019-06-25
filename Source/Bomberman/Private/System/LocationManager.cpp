@@ -82,6 +82,9 @@ void ULocationManager::GenerateMap()
 
 void ULocationManager::CreateWall(int & i, int & j)
 {
+	FVector location(OriginX - BLOCK_SIZE * i, OriginY + BLOCK_SIZE * j, 300);
+	FActorSpawnParameters spawnParams;
+	AActor* wall = GetWorld()->SpawnActor<AActor>(WallClass, location, FRotator(0, 0, 0), spawnParams);
 	CreateFloor(i, j);
 }
 
