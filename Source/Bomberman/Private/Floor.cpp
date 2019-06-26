@@ -2,6 +2,7 @@
 #include "Components/BoxComponent.h"
 #include "Components/StaticMeshComponent.h"
 #include "Utils/UtilsLibrary.h"
+#include "Destructible.h"
 
 AFloor::AFloor()
 {
@@ -16,6 +17,16 @@ AFloor::AFloor()
 	PlayerInteractionCollider = CreateDefaultSubobject<UBoxComponent>(TEXT("InteractionCollider"));
 	PlayerInteractionCollider->SetVisibility(true);
 	PlayerInteractionCollider->SetupAttachment(RootComponent);
+}
+
+void AFloor::OnExplosion()
+{
+	if (IsValid(ActorOnFloor)) {
+		if (ActorOnFloor->GetClass()->ImplementsInterface(UDestructible::StaticClass())) {
+			IDestructible* dest = Cast<IDestructible>(ActorOnFloor);
+			dest->Destruct();
+		}
+	}
 }
 
 void AFloor::BeginPlay()

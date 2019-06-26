@@ -36,7 +36,7 @@ public:
 	AActor* ActorOnFloor;
 
 	UFUNCTION(BlueprintImplementableEvent)
-	void OnHighlight();
+	void OnExplosion();
 
 protected:
 	virtual void BeginPlay() override;

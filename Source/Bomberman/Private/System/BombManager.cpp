@@ -39,12 +39,12 @@ void UBombManager::ExplodeBomb(int row, int col, AActor* bomb)
 
 	for (int i = startI; i < endI; ++i) {
 		AFloor* floor = FloorArray[i].Array[col];
-		floor->OnHighlight();
+		floor->OnExplosion();
 	}
 
 	for (int j = startJ; j < endJ; ++j) {
 		AFloor* floor = FloorArray[row].Array[j];
-		floor->OnHighlight();
+		floor->OnExplosion();
 	}
 
 }
