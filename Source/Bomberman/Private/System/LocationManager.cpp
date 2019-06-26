@@ -102,3 +102,13 @@ void ULocationManager::CreateFloor(int & i, int & j)
 	floor->Column = j;
 	FloorArray[i].Array.Add(floor);
 }
+
+AActor * ULocationManager::CreateBomb(int& i, int& j)
+{
+	FVector location(OriginX - BLOCK_SIZE * i, OriginY + BLOCK_SIZE * j, 300);
+	FActorSpawnParameters spawnParams;
+	AActor* bomb = GetWorld()->SpawnActor<AActor>(BombClass, location, FRotator(0, 0, 0), spawnParams);
+	AFloor* floor = FloorArray[i].Array[j];
+	floor->ActorOnFloor = bomb;
+	return bomb;
+}

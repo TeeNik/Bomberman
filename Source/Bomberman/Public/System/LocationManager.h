@@ -40,6 +40,9 @@ public:
 	UPROPERTY(EditDefaultsOnly, Category = "LocationManager")
 	TSubclassOf<AActor> WallClass;
 
+	UPROPERTY(EditDefaultsOnly, Category = "LocationManager")
+	TSubclassOf<AActor> BombClass;
+
 	UPROPERTY()
 	AActor* GridParent = nullptr;
 
@@ -48,6 +51,9 @@ public:
 
 	UPROPERTY(EditDefaultsOnly, Category = "LocationManager")
 	float OriginY;
+
+	AActor* CreateBomb(int& i, int& j);
+
 
 protected:
 	virtual void BeginPlay() override;

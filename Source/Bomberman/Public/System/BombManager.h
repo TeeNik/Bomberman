@@ -18,13 +18,11 @@ public:
 
 	void SetBomb(AFloor* floor);
 
-
-
 protected:
 	virtual void BeginPlay() override;
 
 private:
 
 	UFUNCTION()
-	void ExplodeBomb(int row, int col);
+	void ExplodeBomb(int row, int col, AActor* bomb);
 };

@@ -4,6 +4,7 @@
 #include "Floor.generated.h"
 
 class UBoxComponent;
+class IDestructible;
 
 enum class OnFloorObj {
 	Player,
@@ -25,8 +26,14 @@ class BOMBERMAN_API AFloor : public AActor
 public:	
 	AFloor();
 
+	UPROPERTY()
 	int Row;
+
+	UPROPERTY()
 	int Column;
+
+	UPROPERTY()
+	AActor* ActorOnFloor;
 
 	UFUNCTION(BlueprintImplementableEvent)
 	void OnHighlight();
