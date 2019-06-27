@@ -18,7 +18,7 @@ AFloor::AFloor()
 	PlayerInteractionCollider->SetVisibility(true);
 	PlayerInteractionCollider->SetupAttachment(RootComponent);
 }
-
+/*
 void AFloor::OnExplosion()
 {
 	if (IsValid(ActorOnFloor)) {
@@ -27,7 +27,7 @@ void AFloor::OnExplosion()
 			dest->Destruct();
 		}
 	}
-}
+}*/
 
 void AFloor::BeginPlay()
 {
