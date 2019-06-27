@@ -17,6 +17,8 @@ AFloor::AFloor()
 	PlayerInteractionCollider = CreateDefaultSubobject<UBoxComponent>(TEXT("InteractionCollider"));
 	PlayerInteractionCollider->SetVisibility(true);
 	PlayerInteractionCollider->SetupAttachment(RootComponent);
+
+    bReplicates = true;
 }
 /*
 void AFloor::OnExplosion()

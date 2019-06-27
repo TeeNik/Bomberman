@@ -26,6 +26,8 @@ ABombermanCharacter::ABombermanCharacter()
 	GetCharacterMovement()->RotationRate = FRotator(0.0f, 540.0f, 0.0f); // ...at this rotation rate
 	GetCharacterMovement()->JumpZVelocity = 600.f;
 	GetCharacterMovement()->AirControl = 0.2f;
+
+    bReplicates = true;
 }
 
 void ABombermanCharacter::SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent)
@@ -36,10 +38,10 @@ void ABombermanCharacter::SetupPlayerInputComponent(class UInputComponent* Playe
 	PlayerInputComponent->BindAxis("MoveForward", this, &ABombermanCharacter::MoveForward);
 	PlayerInputComponent->BindAxis("MoveRight", this, &ABombermanCharacter::MoveRight);
 
-	PlayerInputComponent->BindAxis("Turn", this, &APawn::AddControllerYawInput);
+	/*PlayerInputComponent->BindAxis("Turn", this, &APawn::AddControllerYawInput);
 	PlayerInputComponent->BindAxis("TurnRate", this, &ABombermanCharacter::TurnAtRate);
 	PlayerInputComponent->BindAxis("LookUp", this, &APawn::AddControllerPitchInput);
-	PlayerInputComponent->BindAxis("LookUpRate", this, &ABombermanCharacter::LookUpAtRate);
+	PlayerInputComponent->BindAxis("LookUpRate", this, &ABombermanCharacter::LookUpAtRate);*/
 
 	GetCapsuleComponent()->OnComponentBeginOverlap.AddDynamic(this, &ABombermanCharacter::OnBeginOverlap);
 }

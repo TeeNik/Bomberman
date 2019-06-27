@@ -11,8 +11,6 @@ ULocationManager::ULocationManager()
 void ULocationManager::BeginPlay()
 {
 	Super::BeginPlay();
-
-	GenerateMap();
 }
 
 void ULocationManager::GenerateMap()

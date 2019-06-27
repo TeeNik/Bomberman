@@ -21,4 +21,8 @@ ABombermanGameMode::ABombermanGameMode()
 void ABombermanGameMode::BeginPlay()
 {
 	Super::BeginPlay();
+
+    if (Role == ROLE_Authority) {
+        LocationManager->GenerateMap();
+    }
 }

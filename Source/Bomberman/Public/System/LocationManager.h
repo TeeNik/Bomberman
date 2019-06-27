@@ -54,6 +54,7 @@ public:
 
 	AActor* CreateBomb(int& i, int& j);
 
+    void GenerateMap();
 
 protected:
 	virtual void BeginPlay() override;
@@ -67,7 +68,6 @@ private:
 		Player,
 	};
 
-	void GenerateMap();
 	void CreateWall(int& i, int& j);
 	void CreateDestructable(int& i, int& j);
 	void CreateFloor(int& i, int& j);
