@@ -8,6 +8,7 @@
 
 
 class AFloor;
+class AObstacle;
 
 USTRUCT()
 struct FFloorArray
@@ -43,6 +44,9 @@ public:
 	UPROPERTY(EditDefaultsOnly, Category = "LocationManager")
 	TSubclassOf<AActor> BombClass;
 
+    UPROPERTY(EditDefaultsOnly, Category = "LocationManager")
+    TSubclassOf<AObstacle> ObstacleClass;
+
 	UPROPERTY()
 	AActor* GridParent = nullptr;
 
@@ -63,14 +67,14 @@ private:
 
 	enum MapElements {
 		Wall = 1,
-		Destructible,
+        Obstacle,
 		Floor,
 		Player,
 	};
 
 	void CreateWall(int& i, int& j);
-	void CreateDestructable(int& i, int& j);
-	void CreateFloor(int& i, int& j);
+    void CreateObstacle (int& i, int& j);
+	AFloor* CreateFloor(int& i, int& j);
 
 	const int BLOCK_SIZE = 100;
 };

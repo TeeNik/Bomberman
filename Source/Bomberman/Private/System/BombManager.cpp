@@ -24,7 +24,7 @@ void UBombManager::ExplodeBomb(int row, int col, AActor* bomb)
 
 	const TArray<FFloorArray> FloorArray = GM->GetLocationManager()->GetFloorArray();
 
-	const int radius = 4;
+	const int radius = 2;
 
 	int startI = FMath::Max(0, row - radius);
 	int startJ = FMath::Max(0, col - radius);
@@ -37,20 +37,66 @@ void UBombManager::ExplodeBomb(int row, int col, AActor* bomb)
 	GLog->Log("J edges: " + FString::FromInt(startJ) + " " + FString::FromInt(endJ));
 
 
-	for (int i = startI; i < endI; ++i) {
-		AFloor* floor = FloorArray[i].Array[col];
-		floor->OnExplosion();
-	}
+    for (int i = row; i >= startI; --i)
+    {
+        AFloor* floor = FloorArray[i].Array[col];
+        floor->OnExplosion();
+        OnFloorObj onFloor = floor->OnFloor;
+        if (GetOwner()->Role == ROLE_Authority) {
+            floor->IsExpoding = true;
+        }
+        if (onFloor == OnFloorObj::Wall || onFloor == OnFloorObj::Destructable) {
+            break;
+        }
+    }
 
-	for (int j = startJ; j < endJ; ++j) {
-		AFloor* floor = FloorArray[row].Array[j];
-		floor->OnExplosion();
-	}
+    for (int i = row + 1; i < endI; ++i)
+    {
+        AFloor* floor = FloorArray[i].Array[col];
+        OnFloorObj onFloor = floor->OnFloor;
+        floor->OnExplosion();
+        if (GetOwner()->Role == ROLE_Authority) {
+            floor->IsExpoding = true;
+        }
+        if (onFloor == OnFloorObj::Wall || onFloor == OnFloorObj::Destructable) {
+            break;
+        }
+    }
 
+    for (int j = col; j >= startJ; --j)
+    {
+        AFloor* floor = FloorArray[row].Array[j];
+        OnFloorObj onFloor = floor->OnFloor;
+        floor->OnExplosion();
+        if (GetOwner()->Role == ROLE_Authority) {
+            floor->IsExpoding = true;
+        }
+        if (onFloor == OnFloorObj::Wall || onFloor == OnFloorObj::Destructable) {
+            break;
+        }
+    }
+
+    for (int j = col + 1; j < endJ; ++j)
+    {
+        AFloor* floor = FloorArray[row].Array[j];
+        OnFloorObj onFloor = floor->OnFloor;
+        floor->OnExplosion();
+        if (GetOwner()->Role == ROLE_Authority) {
+            floor->IsExpoding = true;
+        }
+        if (onFloor == OnFloorObj::Wall || onFloor == OnFloorObj::Destructable) {
+            break;
+        }
+    }
 }
 
 void UBombManager::SetBomb(AFloor * floor)
 {
+    if (!IsValid(floor)) {
+        GLog->Log("!IsValid(floor)");
+        return;
+    }
+
 	FTimerHandle timerHandle;
 	FTimerDelegate timerDelegate;
     int row = floor->Row;

@@ -2,6 +2,7 @@
 #include "InputCoreTypes.h"
 #include "Engine/World.h"
 #include "JsonUtilities.h"
+#include "Obstacle.h"
 #include "Floor.h"
 
 ULocationManager::ULocationManager()
@@ -58,8 +59,8 @@ void ULocationManager::GenerateMap()
 				case Wall:
 					CreateWall(i, j);
 					break;
-				case Destructible:
-					CreateDestructable(i, j);
+				case Obstacle:
+                    CreateObstacle(i, j);
 					break;
 				case Floor:
 					CreateFloor(i, j);
@@ -83,15 +84,20 @@ void ULocationManager::CreateWall(int & i, int & j)
 	FVector location(OriginX - BLOCK_SIZE * i, OriginY + BLOCK_SIZE * j, 300);
 	FActorSpawnParameters spawnParams;
 	AActor* wall = GetWorld()->SpawnActor<AActor>(WallClass, location, FRotator(0, 0, 0), spawnParams);
-	CreateFloor(i, j);
+	AFloor* floor = CreateFloor(i, j);
+    floor->OnFloor = OnFloorObj::Wall;
 }
 
-void ULocationManager::CreateDestructable(int & i, int & j)
+void ULocationManager::CreateObstacle(int & i, int & j)
 {
-	CreateFloor(i, j);
+    FVector location(OriginX - BLOCK_SIZE * i, OriginY + BLOCK_SIZE * j, 300);
+    FActorSpawnParameters spawnParams;
+    AActor* obstacle = GetWorld()->SpawnActor<AActor>(ObstacleClass, location, FRotator(0, 0, 0), spawnParams);
+    AFloor* floor = CreateFloor(i, j);
+    floor->OnFloor = OnFloorObj::Destructable;
 }
 
-void ULocationManager::CreateFloor(int & i, int & j)
+AFloor* ULocationManager::CreateFloor(int & i, int & j)
 {
 	FVector location(OriginX - BLOCK_SIZE * i, OriginY + BLOCK_SIZE * j, 200);
 	FActorSpawnParameters spawnParams;
@@ -99,6 +105,7 @@ void ULocationManager::CreateFloor(int & i, int & j)
 	floor->Row = i;
 	floor->Column = j;
 	FloorArray[i].Array.Add(floor);
+    return floor;
 }
 
 AActor * ULocationManager::CreateBomb(int& i, int& j)

@@ -27,6 +27,9 @@ public:
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category=Camera)
 	float BaseLookUpRate;
 
+    UPROPERTY(Replicated)
+    AFloor* Floor;
+
 protected:
 	void MoveForward(float Value);
 
@@ -37,8 +40,10 @@ protected:
 
 	void SetBomb();
 
-	UPROPERTY()
-	AFloor* Floor;
+    UFUNCTION(Server, Reliable, WithValidation)
+    void ServerSetBomb();
+
+	
 
 	UFUNCTION()
 	void OnBeginOverlap(UPrimitiveComponent* OverlappedComp, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult);

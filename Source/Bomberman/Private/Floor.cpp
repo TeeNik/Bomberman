@@ -3,6 +3,8 @@
 #include "Components/StaticMeshComponent.h"
 #include "Utils/UtilsLibrary.h"
 #include "Destructible.h"
+#include "BombermanCharacter.h"
+#include "Net/UnrealNetwork.h"
 
 AFloor::AFloor()
 {
@@ -35,9 +37,15 @@ void AFloor::BeginPlay()
 {
 	Super::BeginPlay();
 
-	//PlayerInteractionCollider->OnComponentBeginOverlap.AddDynamic(this, &AFloor::OnBeginOverlap);
+	PlayerInteractionCollider->OnComponentBeginOverlap.AddDynamic(this, &AFloor::OnBeginOverlap);
+}
 
-	
+void AFloor::OnRep_IsExploding()
+{
+    if (IsExpoding == true) {
+        OnExplosion();
+    }
+    IsExpoding = false;
 }
 
 void AFloor::OnBeginOverlap(UPrimitiveComponent * overlappedComp, AActor * otherActor, UPrimitiveComponent * otherComp, int32 otherBodyIndex, bool bFromSweep, const FHitResult & sweepResult)
@@ -45,5 +53,14 @@ void AFloor::OnBeginOverlap(UPrimitiveComponent * overlappedComp, AActor * other
 	GLog->Log("Overlap");
 	if (otherActor->ActorHasTag(UtilsLibrary::PlayerTag)) {
 		GLog->Log("Player is on " + GetName());
+        ABombermanCharacter* character = Cast<ABombermanCharacter>(otherActor);
+        character->Floor = this;
 	}
 }
+
+void AFloor::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const {
+    Super::GetLifetimeReplicatedProps(OutLifetimeProps);
+
+    DOREPLIFETIME(AFloor, IsExpoding);
+}
+

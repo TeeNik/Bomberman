@@ -7,6 +7,7 @@ class UBoxComponent;
 class IDestructible;
 
 enum class OnFloorObj {
+    None,
 	Player,
 	Wall,
 	Destructable,
@@ -32,11 +33,19 @@ public:
 	UPROPERTY()
 	int Column;
 
+    OnFloorObj OnFloor;
+
 	UPROPERTY()
 	AActor* ActorOnFloor;
 
 	UFUNCTION(BlueprintImplementableEvent)
 	void OnExplosion();
+
+    UPROPERTY(ReplicatedUsing=OnRep_IsExploding, EditAnywhere, BlueprintReadWrite)
+    bool IsExpoding;
+
+    UFUNCTION()
+    void OnRep_IsExploding();
 
 protected:
 	virtual void BeginPlay() override;

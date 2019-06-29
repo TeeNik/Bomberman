@@ -10,6 +10,7 @@
 #include "System/BombManager.h"
 #include "Floor.h"
 #include "UtilsLibrary.h"
+#include "Net/UnrealNetwork.h"
 
 ABombermanCharacter::ABombermanCharacter()
 {
@@ -38,17 +39,28 @@ void ABombermanCharacter::SetupPlayerInputComponent(class UInputComponent* Playe
 	PlayerInputComponent->BindAxis("MoveForward", this, &ABombermanCharacter::MoveForward);
 	PlayerInputComponent->BindAxis("MoveRight", this, &ABombermanCharacter::MoveRight);
 
-	/*PlayerInputComponent->BindAxis("Turn", this, &APawn::AddControllerYawInput);
-	PlayerInputComponent->BindAxis("TurnRate", this, &ABombermanCharacter::TurnAtRate);
-	PlayerInputComponent->BindAxis("LookUp", this, &APawn::AddControllerPitchInput);
-	PlayerInputComponent->BindAxis("LookUpRate", this, &ABombermanCharacter::LookUpAtRate);*/
-
 	GetCapsuleComponent()->OnComponentBeginOverlap.AddDynamic(this, &ABombermanCharacter::OnBeginOverlap);
 }
 
 
+void ABombermanCharacter::ServerSetBomb_Implementation() {
+    SetBomb();
+}
+
+//for future validation
+bool ABombermanCharacter::ServerSetBomb_Validate() {
+    return true;
+}
+
 void ABombermanCharacter::SetBomb()
 {
+    if (Role < ROLE_Authority) {
+        ServerSetBomb();
+        return;
+    }
+
+    GLog->Log(GetName());
+
 	ABombermanGameMode* GM = Cast<ABombermanGameMode>(GetWorld()->GetAuthGameMode());
 	if (GM != NULL) {
 		GM->GetBombManager()->SetBomb(Floor);
@@ -61,6 +73,11 @@ void ABombermanCharacter::OnBeginOverlap(UPrimitiveComponent * OverlappedComp, A
 		AFloor* floor = Cast<AFloor>(OtherActor);
 		if (floor != NULL) {
 			Floor = floor;
+
+            if (Role == ROLE_Authority)
+            {
+                GLog->Log(Floor->GetName());
+            }
 		}
 	}
 }
@@ -97,4 +114,10 @@ void ABombermanCharacter::MoveRight(float Value)
 		const FVector Direction = FRotationMatrix(YawRotation).GetUnitAxis(EAxis::Y);
 		AddMovementInput(Direction, Value);
 	}
+}
+
+void ABombermanCharacter::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const {
+    Super::GetLifetimeReplicatedProps(OutLifetimeProps);
+
+    DOREPLIFETIME(ABombermanCharacter, Floor);
 }
