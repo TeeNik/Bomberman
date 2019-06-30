@@ -95,6 +95,7 @@ void ULocationManager::CreateObstacle(int & i, int & j)
     AActor* obstacle = GetWorld()->SpawnActor<AActor>(ObstacleClass, location, FRotator(0, 0, 0), spawnParams);
     AFloor* floor = CreateFloor(i, j);
     floor->OnFloor = OnFloorObj::Destructable;
+    floor->ActorOnFloor = obstacle;
 }
 
 AFloor* ULocationManager::CreateFloor(int & i, int & j)

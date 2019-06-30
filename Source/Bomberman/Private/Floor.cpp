@@ -37,15 +37,16 @@ void AFloor::BeginPlay()
 {
 	Super::BeginPlay();
 
-	PlayerInteractionCollider->OnComponentBeginOverlap.AddDynamic(this, &AFloor::OnBeginOverlap);
+    PlayerInteractionCollider->OnComponentBeginOverlap.AddDynamic(this, &AFloor::OnBeginOverlap);
+    PlayerInteractionCollider->OnComponentEndOverlap.AddDynamic(this, &AFloor::OnEndOverlap);
 }
 
 void AFloor::OnRep_IsExploding()
 {
     if (IsExpoding == true) {
         OnExplosion();
+        IsExpoding = false;
     }
-    IsExpoding = false;
 }
 
 void AFloor::OnBeginOverlap(UPrimitiveComponent * overlappedComp, AActor * otherActor, UPrimitiveComponent * otherComp, int32 otherBodyIndex, bool bFromSweep, const FHitResult & sweepResult)
@@ -55,7 +56,15 @@ void AFloor::OnBeginOverlap(UPrimitiveComponent * overlappedComp, AActor * other
 		GLog->Log("Player is on " + GetName());
         ABombermanCharacter* character = Cast<ABombermanCharacter>(otherActor);
         character->Floor = this;
+        ActorOnFloor = otherActor;
 	}
+}
+
+void AFloor::OnEndOverlap(UPrimitiveComponent* OverlappedComp, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex)
+{
+    if (OtherActor->ActorHasTag(UtilsLibrary::PlayerTag)) {
+        ActorOnFloor = NULL;
+    }
 }
 
 void AFloor::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const {

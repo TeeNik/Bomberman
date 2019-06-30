@@ -39,55 +39,51 @@ void UBombManager::ExplodeBomb(int row, int col, AActor* bomb)
 
     for (int i = row; i >= startI; --i)
     {
-        AFloor* floor = FloorArray[i].Array[col];
-        floor->OnExplosion();
-        OnFloorObj onFloor = floor->OnFloor;
-        if (GetOwner()->Role == ROLE_Authority) {
-            floor->IsExpoding = true;
-        }
-        if (onFloor == OnFloorObj::Wall || onFloor == OnFloorObj::Destructable) {
+        if (ProduceExplosionOnFloor(FloorArray[i].Array[col])) {
             break;
         }
     }
 
     for (int i = row + 1; i < endI; ++i)
     {
-        AFloor* floor = FloorArray[i].Array[col];
-        OnFloorObj onFloor = floor->OnFloor;
-        floor->OnExplosion();
-        if (GetOwner()->Role == ROLE_Authority) {
-            floor->IsExpoding = true;
-        }
-        if (onFloor == OnFloorObj::Wall || onFloor == OnFloorObj::Destructable) {
+        if (ProduceExplosionOnFloor(FloorArray[i].Array[col])) {
             break;
         }
     }
 
     for (int j = col; j >= startJ; --j)
     {
-        AFloor* floor = FloorArray[row].Array[j];
-        OnFloorObj onFloor = floor->OnFloor;
-        floor->OnExplosion();
-        if (GetOwner()->Role == ROLE_Authority) {
-            floor->IsExpoding = true;
-        }
-        if (onFloor == OnFloorObj::Wall || onFloor == OnFloorObj::Destructable) {
+        if (ProduceExplosionOnFloor(FloorArray[row].Array[j])) {
             break;
         }
     }
 
     for (int j = col + 1; j < endJ; ++j)
     {
-        AFloor* floor = FloorArray[row].Array[j];
-        OnFloorObj onFloor = floor->OnFloor;
-        floor->OnExplosion();
-        if (GetOwner()->Role == ROLE_Authority) {
-            floor->IsExpoding = true;
-        }
-        if (onFloor == OnFloorObj::Wall || onFloor == OnFloorObj::Destructable) {
+        if (ProduceExplosionOnFloor(FloorArray[row].Array[j])) {
             break;
         }
     }
+}
+
+bool UBombManager::ProduceExplosionOnFloor(AFloor* floor)
+{
+    OnFloorObj onFloor = floor->OnFloor;
+    floor->OnExplosion();
+    if (GetOwner()->Role == ROLE_Authority) {
+        floor->IsExpoding = true;
+        floor->IsExpoding = false;
+    }
+    if (onFloor == OnFloorObj::Wall || onFloor == OnFloorObj::Destructable) {
+        if (IsValid(floor->ActorOnFloor)) {
+            floor->ActorOnFloor->Destroy();
+        }
+        return true;
+    }
+    if (IsValid(floor->ActorOnFloor)) {
+        floor->ActorOnFloor->Destroy();
+    }
+    return false;
 }
 
 void UBombManager::SetBomb(AFloor * floor)
@@ -110,5 +106,4 @@ void UBombManager::SetBomb(AFloor * floor)
 		ExplodeBomb(row, col, bomb);
 	});
 	GetWorld()->GetTimerManager().SetTimer(timerHandle, timerDelegate, 3.f, false);
-
 }

@@ -25,4 +25,8 @@ private:
 
 	UFUNCTION()
 	void ExplodeBomb(int row, int col, AActor* bomb);
+
+    void DestroyObstacle();
+
+    bool ProduceExplosionOnFloor(AFloor* floor);
 };
